@@ -1,0 +1,42 @@
+<div class="alert alert-warning records-tip-running <% if @hide_tip_running: %>none<% end %>">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  Records will not create if your Chrome and this extension are not running at 18:00.
+</div>
+<legend class="records-recent">Recent records</legend>
+
+<% if @records_unsynced and @records_unsynced.length: %>
+  <div class="alert alert-warning records-tip-new">
+    You have <strong><%= @records_unsynced.length %></strong> unsync records.
+    <a href="#" class="records-sync">Sync to iProfero</a>
+  </div>
+<% end %>
+
+<ul class="unstyled">
+  <div class="records-week">This week</div>
+  <% if @records_this_week and @records_this_week.length: %>
+    <% for record in @records_this_week: %>
+      <li><strong><%= record.activity_name %></strong> on <strong><%= record.proj_name %></strong> for <strong><%= record.hours %></strong> hours - <%= record.day_name %> - <%= record.day %>
+      <% if record.synced: %>
+        <span class="label label-error pull-right">Synced</span>
+      <% else: %>
+        <span class="label label-info pull-right">Unsync</span>
+      <% end %>
+    <% end %>
+  <% else: %>
+    <pre>no records</pre>
+  <% end %>
+
+  <div class="records-week">A week ago</div>
+  <% if @records_a_week_ago and @records_a_week_ago.length: %>
+    <% for record in @records_a_week_ago: %>
+      <li><strong><%= record.activity_name %></strong> on <strong><%= record.proj_name %></strong> for <strong><%= record.hours %></strong> hours - <%= record.day_name %> - <%= record.day %>
+      <% if record.synced: %>
+        <span class="label label-error pull-right">Synced</span>
+      <% else: %>
+        <span class="label label-info pull-right">Unsync</span>
+      <% end %>
+    <% end %>
+  <% else: %>
+    <pre>no records</pre>
+  <% end %>
+</ul>
