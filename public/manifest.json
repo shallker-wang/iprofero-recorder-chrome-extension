@@ -1,6 +1,6 @@
 {
   "name": "iProfero Recorder",
-  "description": "description here",
+  "description": "A chrome extension to auto record your daily working.",
   "version": "1.0",
   "manifest_version": 2,
   "permissions": [
