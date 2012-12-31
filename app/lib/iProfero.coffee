@@ -1,27 +1,42 @@
+CONFIG = require 'config/iprofero'
+
 class iProfero
 
-  # urlLogin: CONFIG.URL.LOGIN
-  # urlAddTimeLog: CONFIG.URL.ADD_TIME_LOG
+  @urlLogin: CONFIG.URL.LOGIN
+  @urlAddTimeLog: CONFIG.URL.ADD_TIME_LOG
 
   constructor: ->
 
-  login: (email, password)->
-    request = 
+  @login: (email, password, loginSuccess, loginFailed)->
+    requests =
       operation: 'user-login'
       email: email
       password: password
-      redirectLink: '/'
-    @sendRequest @urlLogin, @request
+      redirectLink: '/login/success'
+    
+    $.ajax
+      type: 'post'
+      url: @urlLogin
+      data: requests
+      statusCode:
+        404: loginSuccess ? ->
+        200: loginFailed ? ->
 
-  addTimeLog: (week, day, projId, activeId, hours)->
-    request =
+  @addTimeLog: (week, day, projId, activityId, hours, success, failed)->
+    requests =
       operation: 'add-timelog'
       target_week: week
-      day: day
       proj_id: projId
-      activity_id: activeId
+      activity_id: activityId
       hours: hours
-    @sendRequest @urlAddTimeLog, @request
+      day: day
+      redirectLink: '/sync/success'
+
+    $.ajax
+      type: 'post'
+      url: @urlAddTimeLog
+      data: requests
+      success: success ? ->
 
   sendRequest: (url, data)->
     xhr = new XHR()
