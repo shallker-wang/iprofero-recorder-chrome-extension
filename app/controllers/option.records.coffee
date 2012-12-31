@@ -1,8 +1,8 @@
 Spine = require('spine')
-CONFIG = require 'config/iprofero'
 Option = require 'models/option'
 Record = require 'models/record'
 window.Record = Record
+iProfero = require 'lib/iProfero'
 
 class OptionRecords extends Spine.Controller
 
@@ -11,13 +11,13 @@ class OptionRecords extends Spine.Controller
   className: 'option-records'
 
   elements:
-    'legend.records-recent': 'legendRecent'
-    '.records-tip-running': 'tipRuning'
-    '.records-tip-new': 'tipNew'
+    'legend.records-recent': 'legend_recent'
+    '.records-tip-running': 'tip_running'
+    '.records-tip-new': 'tip_new'
 
   events:
-    'click .records-tip-running .close': 'evHideTipRunning'
-    'click .records-sync': 'evSync'
+    'click .records-tip-running .close': 'clickHideTipRunning'
+    'click .records-sync': 'clickSync'
 
   constructor: ->
     super
@@ -38,21 +38,10 @@ class OptionRecords extends Spine.Controller
 
   sync: ->
     records = Record.getUnsynced()
-    @record = records.shift()
-    requests =
-      operation: 'add-timelog'
-      target_week: @record.target_week
-      proj_id: @record.proj_id
-      activity_id: @record.activity_id
-      hours: @record.hours
-      day: @record.day
-      redirectLink: '/sync/success'
-
-    $.ajax
-      type: 'post'
-      url: CONFIG.URL.ADD_TIME_LOG
-      data: requests
-      success: @syncSuccess
+    record = records.shift()
+    @record = record
+    iProfero.addTimeLog record.week, record.day, record.proj_id, 
+      record.activity_id, record.hours, @syncSuccess
 
   syncSuccess: (response)=>
     @record.updateAttribute('synced', true)
@@ -61,19 +50,31 @@ class OptionRecords extends Spine.Controller
   syncFailed: (response)=>
     @log 'syncFailed', response
 
-  evHideTipRunning: (ev)->
+  clickHideTipRunning: (ev)->
     ev.preventDefault()
-    option = new Option name: 'hide_tip_running', value: true
-    option.save()
+    new Option(name: 'hide_tip_running', value: true).save()
     @refresh()
 
-  evSync: (ev)->
+  clickSync: (ev)->
     ev.preventDefault()
-    @sync()
+    @login()
 
   refresh: ->
     @navigate '/temp'
     @navigate '/records'
 
+  login: ->
+    email = Option.get 'email'
+    password = Option.get 'password'
+    iProfero.login email, password, @loginSuccess, @loginFailed
+
+  loginSuccess: =>
+    @sync()
+
+  loginFailed: =>
+    @alert 'error', 'Account invalid.'
+
+  alert: (type, msg)->
+    @el.after require("views/alert.#{type}")(msg: msg)
     
 module.exports = OptionRecords

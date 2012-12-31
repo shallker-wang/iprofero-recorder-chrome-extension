@@ -1,27 +1,41 @@
 require('lib/setup')
 
 Spine = require('spine')
+
+CONFIG = require 'config/extension'
+Timer = require 'lib/timer'
+
 Work = require 'models/work'
 Record = require 'models/record'
 
+window.BA = chrome.browserAction
+
 class Background extends Spine.Controller
 
-  records_create_hour: 6
+  running_interval: CONFIG.RUNNING_INTERVAL  # 1 minute
+  records_create_hour: CONFIG.RECORDS_CREATE_HOUR
   records_created_today: false
-  records_check_interval: 1000*60  # 1 minute
+  records_unsync_count: 0
 
   constructor: ->
     super
     Record.fetch()
+    @openOptions()
+    @listenClick @clickBrowserAction
     @running()
 
   running: ->
-    window.setInterval @checkTime, @records_check_interval
+    window.setInterval @checkTime, @running_interval
+    window.setInterval @checkUnsync, @running_interval
 
-  createRecords: ->
-    now = new Date
-    # now = new Date(2012, 12, 28)
-    nowTime = now.getTime()
+  setUnsyncTip: (num)->
+    num = num.toString()
+    chrome.browserAction.setBadgeText text: num
+
+  clearUnsyncTip: ->
+    chrome.browserAction.setBadgeText text: ''
+
+  createRecords: (now)->
     Work.fetch()
     works = Work.all()
     for work in works
@@ -31,61 +45,60 @@ class Background extends Spine.Controller
       record.activity_id = work.activity_id
       record.activity_name = work.activity_name
       record.hours = work.hours
-      record.time = nowTime
+      record.time = now.getTime()
       record.synced = false
-      record.target_week = @getThisWeek nowTime
-      record.day = @getFullDay nowTime
-      record.day_name = @getDayName now.getDay()
+      record.target_week = @getTargetWeek now
+      record.day = @getFullDay now
+      record.day_name = @getDayName now
       @log record
       record.save()
 
-  getDayName: (day)->
-    weekday = []
-    weekday[0] = "Sunday"
-    weekday[1] = "Monday"
-    weekday[2] = "Tuesday"
-    weekday[3] = "Wednesday"
-    weekday[4] = "Thursday"
-    weekday[5] = "Friday"
-    weekday[6] = "Saturday"
-    weekday[day]
+  getTargetWeek: (now)->
+    week = Timer.getThisWeek now.getTime()
+    "#{@getFullDay week.begin} / #{@getFullDay week.end}"
 
-  getFullDay: (time)->
-    now = new Date(time)
-    year = now.getFullYear()
-    month = now.getMonth() + 1
-    date = now.getDate()
-    month = "0#{month}" if month.toString().length is 1
-    date = "0#{date}" if date.toString().length is 1
-    fullDay = "#{year}-#{month}-#{date}"
-    fullDay
+  getFullDay: (now)->
+    Timer.getFullDay now.getTime()
 
-  getThisWeek: (time)->
-    curr = new Date(time)
-    thisMonday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 1))
-    thisSunday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 7))
-    thisMondayFullDay = @getFullDay thisMonday.getTime()
-    thisSundayFullDay = @getFullDay thisSunday.getTime()
-    thisWeek = "#{thisMondayFullDay} / #{thisSundayFullDay}"
-    thisWeek
+  getDayName: (now)->
+    Timer.getDayName now.getTime()
 
   checkTime: =>
-    currHour = new Date().getHours()
-    if currHour is @records_create_hour
-      @createRecords() unless @isRecordsCreatedToday()
-
-  isRecordsCreatedToday: ->
-    return true if @records_created_today is true
-    lastRecord = Record.last()
-    # no records at all
-    return false unless lastRecord
-    lastCreating = new Date lastRecord.time
+    @log 'checkTime'
     now = new Date
-    if now.getDate() == lastCreating.getDate()
-      @records_created_today = true
-      return true
-    else
-      return false
+    @createRecords(now) if @isRecordsCreateHour(now) and not @isRecordsCreatedToday(now)
+
+  checkUnsync: =>
+    Record.fetch()
+    @records_unsync_count = Record.getUnsynced().length
+    if @records_unsync_count then @setUnsyncTip @records_unsync_count else @clearUnsyncTip()
+
+  listenClick: (listener)->
+    chrome.browserAction.onClicked.addListener listener
+
+  clickBrowserAction: (tab)=>
+    if @records_unsync_count then @openOptionRecords() else @openOptions()
+
+  openTab: (url)->
+    chrome.tabs.create url: url
+
+  openOptions: ->
+    @openTab "options.html"
+
+  openOptionRecords: ->
+    @openTab 'options.html#/records'
+
+  isRecordsCreateHour: (now)->
+    now.getHours() is @records_create_hour
+
+  isRecordsCreatedToday: (now)->
+    return true if @records_created_today is true
+    return @records_created_today = true if @isLastRecordCreatedToday(now)
+    false
       
+  isLastRecordCreatedToday: (now)->
+    return false unless lastRecord = Record.last()
+    return true if now.getDate() == new Date(lastRecord.time).getDate()
+    false
 
 module.exports = Background
