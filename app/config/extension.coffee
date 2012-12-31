@@ -1,5 +1,5 @@
 CONFIG =
-  RUNNING_INTERVAL: 1000*3  # 1 minute
-  RECORDS_CREATE_HOUR: 14  # 6pm
+  RUNNING_INTERVAL: 1000*60  # 1 minute
+  RECORDS_CREATE_HOUR: 16  # 6pm
 
 module.exports = CONFIG

@@ -1,11 +1,16 @@
-<div class="hero-unit text-center">
-  <h4>
-    This extension will help you recording your daily job on iProfero
-  </h4>
-  <h5>
-    &amp;
-  </h5>
-  <h4>
-    save your time for a cup of coffee.
-  </h4>
-</div>
+
+<legend>What is this</legend>
+  <p>This extension is trying to help you auto record your daily works and save your time for a cup of coffee. :)</p>
+<legend>How to use it</legend>
+  <ol>
+    <li>Add your iProfero account in tab <a href="#/account">Account</a></li>
+    <li>Add your recent daily works in tab <a href="#/works">Works</a></li>
+    <li>Sync your work records to iProfero after work in tab <a href="#/records">Records</a></li>
+  </ol>
+<legend>Have a problem</legend>
+  <p>Leave your problem at <a href="https://github.com/shallker-wang/iprofero-recorder-chrome-extension/issues">https://github.com/shallker-wang/iprofero-recorder-chrome-extension/issues</a></p>
+<legend>Have a better idea</legend>
+  <p>You are welcomed to contribute.</p>
+  <pre>git clone https://github.com/shallker-wang/iprofero-recorder-chrome-extension.git</pre>
+<legend>Say a thank you</legend>
+  <p>Here, <a href="mailto:shallker.wang@profero.com">shallker.wang@profero.com</a></p>

@@ -1,8 +1,7 @@
-<!-- 
 <li class="nav-welcome active" data-nav="welcome">
   <a href="#">Welcome</a>
 </li>
- -->
+
 <li class="nav-account" data-nav="account">
   <a href="#">Account</a>
 </li>

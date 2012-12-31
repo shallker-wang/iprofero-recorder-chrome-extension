@@ -1,8 +1,11 @@
+iProfero = require 'lib/iProfero'
+BrowserAction = require 'lib/BrowserAction'
+
 Spine = require('spine')
+
 Option = require 'models/option'
 Record = require 'models/record'
 window.Record = Record
-iProfero = require 'lib/iProfero'
 
 class OptionRecords extends Spine.Controller
 
@@ -45,6 +48,7 @@ class OptionRecords extends Spine.Controller
 
   syncSuccess: (response)=>
     @record.updateAttribute('synced', true)
+    BrowserAction.setBadgeTip Record.getUnsynced().length
     @refresh()
 
   syncFailed: (response)=>

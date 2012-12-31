@@ -1,14 +1,13 @@
 require('lib/setup')
+Timer = require 'lib/timer'
+BrowserAction = require 'lib/BrowserAction'
 
 Spine = require('spine')
 
 CONFIG = require 'config/extension'
-Timer = require 'lib/timer'
 
 Work = require 'models/work'
 Record = require 'models/record'
-
-window.BA = chrome.browserAction
 
 class Background extends Spine.Controller
 
@@ -20,25 +19,24 @@ class Background extends Spine.Controller
   constructor: ->
     super
     Record.fetch()
-    @openOptions()
-    @listenClick @clickBrowserAction
+    BrowserAction.openTab 'options.html'
+    BrowserAction.listenClick @clickIcon
     @running()
 
   running: ->
+    @checkTime()
+    @checkUnsync()
     window.setInterval @checkTime, @running_interval
     window.setInterval @checkUnsync, @running_interval
-
-  setUnsyncTip: (num)->
-    num = num.toString()
-    chrome.browserAction.setBadgeText text: num
-
-  clearUnsyncTip: ->
-    chrome.browserAction.setBadgeText text: ''
 
   createRecords: (now)->
     Work.fetch()
     works = Work.all()
     for work in works
+      week = Timer.getThisWeek now.getTime()
+      targetWeek = "#{@getFullDay week.begin} / #{@getFullDay week.end}"
+      fullDay = Timer.getFullDay now.getTime()
+      dayName = Timer.getDayName now.getTime()
       record = new Record
       record.proj_id = work.proj_id
       record.proj_name = work.proj_name
@@ -47,21 +45,11 @@ class Background extends Spine.Controller
       record.hours = work.hours
       record.time = now.getTime()
       record.synced = false
-      record.target_week = @getTargetWeek now
-      record.day = @getFullDay now
-      record.day_name = @getDayName now
+      record.target_week = targetWeek
+      record.day = fullDay
+      record.day_name = dayName
       @log record
       record.save()
-
-  getTargetWeek: (now)->
-    week = Timer.getThisWeek now.getTime()
-    "#{@getFullDay week.begin} / #{@getFullDay week.end}"
-
-  getFullDay: (now)->
-    Timer.getFullDay now.getTime()
-
-  getDayName: (now)->
-    Timer.getDayName now.getTime()
 
   checkTime: =>
     @log 'checkTime'
@@ -71,22 +59,14 @@ class Background extends Spine.Controller
   checkUnsync: =>
     Record.fetch()
     @records_unsync_count = Record.getUnsynced().length
-    if @records_unsync_count then @setUnsyncTip @records_unsync_count else @clearUnsyncTip()
+    if @records_unsync_count
+    then BrowserAction.setBadgeTip @records_unsync_count
+    else BrowserAction.clearBadgeTip()
 
-  listenClick: (listener)->
-    chrome.browserAction.onClicked.addListener listener
-
-  clickBrowserAction: (tab)=>
-    if @records_unsync_count then @openOptionRecords() else @openOptions()
-
-  openTab: (url)->
-    chrome.tabs.create url: url
-
-  openOptions: ->
-    @openTab "options.html"
-
-  openOptionRecords: ->
-    @openTab 'options.html#/records'
+  clickIcon: (tab)=>
+    if @records_unsync_count
+    then BrowserAction.openTab 'options.html#/records'
+    else BrowserAction.openTab 'options.html'
 
   isRecordsCreateHour: (now)->
     now.getHours() is @records_create_hour

@@ -16,6 +16,6 @@ class Options extends Spine.Controller
     @append @nav, @content
 
     Spine.Route.setup()
-    @navigate '/account' unless window.location.hash
+    @navigate '/welcome' unless window.location.hash
 
 module.exports = Options
