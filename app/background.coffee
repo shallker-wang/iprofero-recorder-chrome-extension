@@ -19,9 +19,19 @@ class Background extends Spine.Controller
   constructor: ->
     super
     Record.fetch()
-    BrowserAction.openTab 'options.html'
     BrowserAction.listenClick @clickIcon
+    @afterInstalled() if @isFirstInstalled()
     @running()
+
+  openOptions: ->
+    BrowserAction.openTab 'options.html'
+
+  isFirstInstalled: ->
+    return localStorage.installed
+
+  afterInstalled: ->
+    @openOptions()
+    localStorage.installed = true
 
   running: ->
     @checkTime()
