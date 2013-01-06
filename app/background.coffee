@@ -44,7 +44,7 @@ class Background extends Spine.Controller
     works = Work.all()
     for work in works
       week = Timer.getThisWeek now.getTime()
-      targetWeek = "#{@getFullDay week.begin} / #{@getFullDay week.end}"
+      targetWeek = "#{Timer.getFullDay week.begin} / #{Timer.getFullDay week.end}"
       fullDay = Timer.getFullDay now.getTime()
       dayName = Timer.getDayName now.getTime()
       record = new Record
