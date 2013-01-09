@@ -33,6 +33,14 @@ class Background extends Spine.Controller
     @openOptions()
     localStorage.installed = true
 
+  onRun: =>
+    
+  run: (secs)=>
+    @running = @cron @onRun, secs
+    
+  cron: (func, secs)->
+    window.setInterval func, secs*1000
+
   running: ->
     @checkTime()
     @checkUnsync()
