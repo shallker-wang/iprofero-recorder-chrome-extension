@@ -16,6 +16,12 @@ class Background extends Spine.Controller
   records_created_today: false
   records_unsync_count: 0
 
+  repeat = (func, secs)->
+    window.setInterval func, secs*1000
+    
+  later = (func, secs)->
+    window.setTimeout func, secs*1000
+
   constructor: ->
     super
     Record.fetch()
@@ -36,11 +42,8 @@ class Background extends Spine.Controller
   onRun: =>
     
   run: (secs)=>
-    @running = @cron @onRun, secs
+    @running = repeat @onRun, secs
     
-  cron: (func, secs)->
-    window.setInterval func, secs*1000
-
   running: ->
     @checkTime()
     @checkUnsync()
