@@ -25,20 +25,20 @@ class Background extends Spine.Controller
   constructor: ->
     super
     Record.fetch()
-    BrowserAction.listenClick @clickIcon
-    @afterInstalled() if @isFirstInstalled()
+    BrowserAction.listenClick @onClickIcon
+    @firstInstall() if not @isInstalled()
     @running()
 
   openOptions: ->
     BrowserAction.openTab 'options.html'
 
-  isFirstInstalled: ->
+  isInstalled: ->
     return localStorage.installed
 
-  afterInstalled: ->
+  firstInstall: ->
     @openOptions()
     localStorage.installed = true
-
+    
   onRun: =>
     
   run: (secs)=>
@@ -84,7 +84,7 @@ class Background extends Spine.Controller
     then BrowserAction.setBadgeTip @records_unsync_count
     else BrowserAction.clearBadgeTip()
 
-  clickIcon: (tab)=>
+  onClickIcon: (tab)=>
     if @records_unsync_count
     then BrowserAction.openTab 'options.html#/records'
     else BrowserAction.openTab 'options.html'
