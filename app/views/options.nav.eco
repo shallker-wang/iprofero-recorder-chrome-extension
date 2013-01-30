@@ -1,15 +1,15 @@
 <li class="nav-welcome active" data-nav="welcome">
-  <a href="#">Welcome</a>
+  <a href="#/welcome">Welcome</a>
 </li>
 
 <li class="nav-account" data-nav="account">
-  <a href="#">Account</a>
+  <a href="#/account">Account</a>
 </li>
 
 <li class="nav-works" data-nav="works">
-  <a href="#">Works</a>
+  <a href="#/works">Works</a>
 </li>
 
 <li class="nav-records" data-nav="records">
-  <a href="#">Records</a>
+  <a href="#/records">Records</a>
 </li>
