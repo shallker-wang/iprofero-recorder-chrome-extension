@@ -2,8 +2,6 @@ Spine = require('spine')
 
 class OptionsNav extends Spine.Controller
 
-  template: require('views/options.nav')()
-
   tag: 'ul'
   className: 'nav nav-tabs options-nav'
 
@@ -11,36 +9,20 @@ class OptionsNav extends Spine.Controller
     'li': 'navs'
 
   events:
-    'click li': 'triggle'
+    'click li': 'onClickLi'
 
   constructor: ->
     super
     @append @render()
 
-    @routes
-      '/welcome': (route)-> @active 'welcome'
-      '/account': (route)-> @active 'account'
-      '/works': (route)-> @active 'works'
-      '/records': (route)-> @active 'records'
-
   render: ->
-    @template
+    require('views/options.nav')()
 
-  triggle: (ev)->
-    ev.preventDefault()
-    @nav $(ev.currentTarget).attr 'data-nav'
+  onClickLi: (click)=>
+    @active click.currentTarget
 
-  nav: (section)->
-    @navigate "/#{section}"
-
-  routing: (route)->
-    @active route.match.input
-
-  getNav: (section)->
-    return @navs.filter "[data-nav=#{section}]"
-
-  active: (section)->
-    @navs.removeClass 'active'
-    @getNav(section).addClass 'active'
+  active: (el)->
+    $(el).siblings().removeClass 'active'
+    $(el).addClass 'active'
 
 module.exports = OptionsNav
