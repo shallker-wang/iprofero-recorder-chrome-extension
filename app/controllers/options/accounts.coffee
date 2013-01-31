@@ -5,7 +5,7 @@ Option = require('models/option')
 XHR = require('lib/XHR')
 iProfero = require 'lib/iProfero'
 
-class OptionAccounts extends Spine.Controller
+class Accounts extends Spine.Controller
   
   className: 'option-accounts'
 
@@ -57,4 +57,4 @@ class OptionAccounts extends Spine.Controller
   alert: (type, msg)->
     @legend_setting.after require("views/alert.#{type}")(msg: msg)
 
-module.exports = OptionAccounts
+module.exports = Accounts

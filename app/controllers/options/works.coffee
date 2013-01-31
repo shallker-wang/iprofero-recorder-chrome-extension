@@ -4,7 +4,7 @@ Work = require('models/work')
 PROJECTS = require('data/projects')
 ACTIVITIES = require('data/activities')
 
-class OptionWorks extends Spine.Controller
+class Works extends Spine.Controller
 
   className: 'tab-pane option-works'
 
@@ -53,4 +53,4 @@ class OptionWorks extends Spine.Controller
     @navigate '/temp'
     @navigate '/works'
     
-module.exports = OptionWorks
+module.exports = Works

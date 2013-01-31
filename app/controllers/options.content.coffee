@@ -1,10 +1,10 @@
 Spine = require('spine')
 doT = require('lib/doT')
 
-Welcome = require('controllers/option.welcome')
-Accounts = require('controllers/option.accounts')
-Works = require('controllers/option.works')
-Records = require('controllers/option.records')
+Welcome = require('controllers/options/welcome')
+Accounts = require('controllers/options/accounts')
+Works = require('controllers/options/works')
+Records = require('controllers/options/records')
 
 class OptionsContent extends Spine.Controller
 

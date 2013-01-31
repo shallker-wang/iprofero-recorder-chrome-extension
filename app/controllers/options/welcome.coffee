@@ -1,6 +1,6 @@
 Spine = require('spine')
 
-class OptionWelcome extends Spine.Controller
+class Welcome extends Spine.Controller
   
   className: 'option-welcome'
 
@@ -13,4 +13,4 @@ class OptionWelcome extends Spine.Controller
   render: ->
     @template
     
-module.exports = OptionWelcome
+module.exports = Welcome

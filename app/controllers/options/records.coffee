@@ -7,7 +7,7 @@ Option = require 'models/option'
 Record = require 'models/record'
 window.Record = Record
 
-class OptionRecords extends Spine.Controller
+class Records extends Spine.Controller
 
   data: {}
 
@@ -81,4 +81,4 @@ class OptionRecords extends Spine.Controller
   alert: (type, msg)->
     @el.after require("views/alert.#{type}")(msg: msg)
     
-module.exports = OptionRecords
+module.exports = Records
