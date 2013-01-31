@@ -1,5 +1,0 @@
-CONFIG =
-  RUNNING_INTERVAL: 1000*60  # 1 minute
-  RECORDS_CREATE_HOUR: 18  # 6pm
-
-module.exports = CONFIG
