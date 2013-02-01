@@ -1,56 +1,32 @@
 Spine = require('spine')
+WorksList = require('controllers/options/works.list')
+WorksAdding = require('controllers/options/works.adding')
 
-Work = require('models/work')
-PROJECTS = require('data/projects')
-ACTIVITIES = require('data/activities')
+Setting = require('models/setting')
 
 class Works extends Spine.Controller
 
-  className: 'tab-pane option-works'
-
   elements:
-    '#select-work-project': 'project'
-    '#select-work-activity': 'activity'
-    '#select-work-hours': 'hours'
-    'ul.works-list': 'list'
-
-  events:
-    'click #a-work-add': 'add'
-    'click .works-list .work-delete': 'del'
+    '#works-list': 'elList'
+    '#works-adding': 'elAdding'
 
   constructor: ->
     super
-    Work.fetch()
-    data =
-      works: Work.all()
-      projects: PROJECTS
-      activities: ACTIVITIES
-    @html @render data
+    return @noAccount() if not Setting.get 'email'
+    @html @render()
 
-  render: (data)->
-    require('views/options/works')(data)
+    Options.get 'email'
 
-  del: (ev)->
-    ev.preventDefault()
-    id = $(ev.target).parent().attr('data-work-id')
-    Work.destroy(id)
-    @refresh()
+    @list = new WorksList
+    @elList.html @list.el
+    
+    @adding = new WorksAdding
+    @elAdding.html @adding.el
 
-  add: (ev)->
-    ev.preventDefault()
-    now = new Date
-    work = new Work
-    work.proj_id = @project.val()
-    work.proj_name = @project.find('option:selected').text()
-    work.activity_id = @activity.val()
-    work.activity_name = @activity.find('option:selected').text()
-    work.hours = @hours.val()
-    work.time = now.getTime()
-    work.save()
-    @refresh()
+  render: ->
+    require('views/options/works')()
 
-  refresh: ->
-    @navigate '/temp'
-    @navigate '/works'
+  noAccount: ->
+    @html '<p>You need to setup your account first.</p>'
     
 module.exports = Works
