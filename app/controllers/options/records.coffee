@@ -37,7 +37,7 @@ class Records extends Spine.Controller
     @data
 
   render: (data)->
-    require('views/option.records')(data)
+    require('views/options/records')(data)
 
   sync: ->
     records = Record.getUnsynced()

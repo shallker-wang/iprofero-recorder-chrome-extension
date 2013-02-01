@@ -16,7 +16,7 @@ class OptionsNav extends Spine.Controller
     @append @render()
 
   render: ->
-    require('views/options.nav')()
+    require('views/options/nav')()
 
   onClickLi: (click)=>
     @active click.currentTarget

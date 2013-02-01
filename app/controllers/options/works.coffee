@@ -28,7 +28,7 @@ class Works extends Spine.Controller
     @html @render data
 
   render: (data)->
-    require('views/option.works')(data)
+    require('views/options/works')(data)
 
   del: (ev)->
     ev.preventDefault()

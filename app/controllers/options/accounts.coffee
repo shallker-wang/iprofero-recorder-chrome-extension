@@ -28,7 +28,7 @@ class Accounts extends Spine.Controller
     @html @render @load()
 
   render: (data)->
-    require('views/option.accounts')(data)
+    require('views/options/accounts')(data)
 
   load: ->
     email: @email, password: @password
