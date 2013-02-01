@@ -1,61 +1,9 @@
-<legend>Current daily works</legend>
-<ul class="unstyled works-list">
-  <% if @works.length: %>
-    <% for work in @works: %>
-      <li data-work-id="<%= work.id %>">
-        <span>Project:</span>
-        <strong class="mr10"><%= work.proj_name %></strong>
-        <span>Doing:</span>
-        <strong class="mr10"><%= work.activity_name %></strong>
-        <span>Average hours:</span>
-        <strong class="mr10"><%= work.hours %></strong>
-        <a href="#" class="close pull-right work-delete">&times;</a>
-      </li>
-    <% end %>
-  <% else: %>
-    <pre>No works</pre>
-  <% end %>
-</ul>
-  
-<legend>Add a new work</legend>
-<form class="form-inline">
-  <label for="select-work-project">Project:</label>
-  <select class="span3 mr10" id="select-work-project" name="project">
-    <% if @projects.length: %>
-      <% for project in @projects: %>
-        <option value="<%= project.id %>"><%= project.name %></option>
-      <% end %>
-    <% end %>
-  </select>
+<div class="tab-pane option-works">
 
-  <label for="select-work-activity">Doing:</label>
-  <select class="span2 mr10" id="select-work-activity" name="activity">
-    <% if @activities.length: %>
-      <% for activity in @activities: %>
-        <option value="<%= activity.id %>"><%= activity.name %></option>
-      <% end %>
-    <% end %>
-  </select>
+  <legend>Current daily works</legend>
+  <div id="works-list"></div>
 
-  <label for="select-work-hours">Average hours</label>
-  <select class="span1 mr10" id="select-work-hours" name="hours">
-    <option value="0">0</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-    <option value="8">8</option>
-    <option value="9">9</option>
-    <option value="10">10</option>
-    <option value="11">11</option>
-    <option value="12">12</option>
-    <option value="13">13</option>
-    <option value="14">14</option>
-    <option value="15">15</option>
-    <option value="16">16</option>
-  </select>
+  <legend>Add a new work</legend>
+  <div id="works-adding"></div>
 
-  <button class="btn pull-right" id="a-work-add"><i class="icon-plus"></i> Add</button>
-</form>
+</div>
