@@ -1,7 +1,7 @@
 Spine = require('spine')
 
 CONFIG = require('config/iprofero')
-Option = require('models/option')
+Setting = require('models/setting')
 XHR = require('lib/XHR')
 iProfero = require 'lib/iProfero'
 
@@ -22,9 +22,9 @@ class Accounts extends Spine.Controller
 
   constructor: ->
     super
-    Option.fetch()
-    @email = Option.get 'email'
-    @password = Option.get 'password'
+    Setting.fetch()
+    @email = Setting.get 'email'
+    @password = Setting.get 'password'
     @html @render @load()
 
   render: (data)->
@@ -36,10 +36,10 @@ class Accounts extends Spine.Controller
   save: ->
     @email = @input_email.val()
     @password = @input_password.val()
-    option = new Option name: 'email', value: @email
-    option.save()
-    option = new Option name: 'password', value: @password
-    option.save()
+    setting = new Setting name: 'email', value: @email
+    setting.save()
+    setting = new Setting name: 'password', value: @password
+    setting.save()
     @alert 'success', 'Account saved.'
 
   invalid: =>
