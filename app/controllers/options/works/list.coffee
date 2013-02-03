@@ -43,17 +43,19 @@ class List extends Spine.Controller
 
   constructor: ->
     super
-    @html @render()
+    @render()
     @works = Work.all()
-    @drawList() if @works.length
+    @renderList() if @works.length
 
     Work.bind 'create', @onWorkCreate
 
-  drawList: ->
+  renderList: ->
     @elList.html ''
     @appendLi @renderLi work for work in @works
 
   onWorkCreate: (work)=>
+    @works.push work
+    return @renderList() if @works.length is 1
     @appendLi @renderLi work
 
   appendLi: (el)->
@@ -64,6 +66,6 @@ class List extends Spine.Controller
     li.el
 
   render: ->
-    require('views/options/works/list')()
+    @html require('views/options/works/list')()
 
 module.exports = List
