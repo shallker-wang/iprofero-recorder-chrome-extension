@@ -32,6 +32,8 @@ class Records extends Spine.Controller
     @sync = new Syncs el: @elSync
     @list = new Lists el: @elList
 
+    # @createRecord()
+
   render: ->
     @html require('views/options/records')()
 
@@ -55,22 +57,7 @@ class Records extends Spine.Controller
       'day': Timer.getFullDay now.getTime()
       'day_name': Timer.getDayName now.getTime()
     @log record
-    # record.save()
-
-  sync: ->
-    records = Record.getUnsynced()
-    record = records.shift()
-    @record = record
-    iProfero.addTimeLog record.week, record.day, record.proj_id, 
-      record.activity_id, record.hours, @syncSuccess
-
-  syncSuccess: (response)=>
-    @record.updateAttribute('synced', true)
-    BrowserAction.setBadgeTip Record.getUnsynced().length
-    @refresh()
-
-  syncFailed: (response)=>
-    @log 'syncFailed', response
+    record.save()
 
   login: ->
     email = Option.get 'email'

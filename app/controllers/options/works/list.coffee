@@ -16,7 +16,6 @@ class Li extends Spine.Controller
   constructor: (data)->
     super
     @work = data.work
-    @work.bind 'update', @onUpdateWork
     @render()
 
   render: ->
@@ -28,9 +27,6 @@ class Li extends Spine.Controller
   onClickDelete: (click)=>
     evStop click
     @delete()
-
-  onUpdateWork: (work)=>
-    @log 'onUpdateWork', work
 
   delete: ->
     @work.destroy()

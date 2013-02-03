@@ -8,14 +8,17 @@ class Li extends Spine.Controller
   constructor: (data)->
     super
     @record = data.record
+    @record.bind 'update', @onUpdateRecord
     @render()
 
   render: (record)->
     @html @view @record
 
-  view: (record)->
-    require('views/options/records/lists.li')(record)
+  view: (data)->
+    require('views/options/records/lists.li')(data)
 
+  onUpdateRecord: (@record)=>
+    @render()
 
 class Lists extends Spine.Controller
 
