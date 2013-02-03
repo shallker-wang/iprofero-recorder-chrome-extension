@@ -1,7 +1,8 @@
 Spine = require('spine')
-WorksList = require('controllers/options/works.list')
-WorksAdding = require('controllers/options/works.adding')
+WorksList = require('controllers/options/works/list')
+WorksAdding = require('controllers/options/works/add')
 
+Work = require('models/work')
 Setting = require('models/setting')
 
 class Works extends Spine.Controller
@@ -15,7 +16,7 @@ class Works extends Spine.Controller
     return @noAccount() if not Setting.get 'email'
     @html @render()
 
-    Options.get 'email'
+    Work.fetch()
 
     @list = new WorksList
     @elList.html @list.el
@@ -27,6 +28,6 @@ class Works extends Spine.Controller
     require('views/options/works')()
 
   noAccount: ->
-    @html '<p>You need to setup your account first.</p>'
+    @html require('views/units/setup_account')()
     
 module.exports = Works

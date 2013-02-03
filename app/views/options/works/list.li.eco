@@ -1,0 +1,7 @@
+<span>Project:</span>
+<strong class="mr10"><%= @proj_name %></strong>
+<span>Doing:</span>
+<strong class="mr10"><%= @activity_name %></strong>
+<span>Average hours:</span>
+<strong class="mr10"><%= @hours %></strong>
+<a href="#" class="close pull-right" action="delete">&times;</a>

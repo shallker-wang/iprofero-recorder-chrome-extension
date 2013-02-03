@@ -1,0 +1,4 @@
+<div class="alert alert-warning records-tip-running">
+  <button type="button" class="close" action="hide" data-dismiss="alert">&times;</button>
+  Records will not create if your Chrome and this extension are not running at 18:00.
+</div>

@@ -1,4 +1,5 @@
 Spine = require('spine')
+iProfero = require('lib/iProfero')
 
 class Record extends Spine.Model
   @configure 'Record', 'proj_id', 'proj_name', 'activity_id', 'activity_name', 'hours', 'time', 'synced', 'target_week', 'day', 'day_name'
@@ -32,5 +33,14 @@ class Record extends Spine.Model
 
   @getTimeBetween: (startTime, endTime)->
     @select (record)-> record.time > startTime and record.time < endTime
+
+  @sync: ->
+    onSyncSuccess = (rid)=>
+      record = @find rid
+      record.updateAttribute 'synced', true
+    records = @getUnsynced()
+    for record in records
+      iProfero.addTimeLog record.id, record.week, record.day, record.proj_id, 
+        record.activity_id, record.hours, onSyncSuccess
 
 module.exports = Record

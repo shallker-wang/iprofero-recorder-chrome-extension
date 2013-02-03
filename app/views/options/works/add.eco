@@ -1,24 +1,20 @@
 <form class="form-inline">
   <label for="select-work-project">Project:</label>
-  <select class="span3 mr10" id="select-work-project" name="project">
-    <% if @projects.length: %>
-      <% for project in @projects: %>
-        <option value="<%= project.id %>"><%= project.name %></option>
-      <% end %>
+  <select class="span3 mr10 projects" id="select-work-project" name="project">
+    <% for project_id, project of @projects: %>
+      <option value="<%= project_id %>"><%= project %></option>
     <% end %>
   </select>
 
   <label for="select-work-activity">Doing:</label>
-  <select class="span2 mr10" id="select-work-activity" name="activity">
-    <% if @activities.length: %>
-      <% for activity in @activities: %>
-        <option value="<%= activity.id %>"><%= activity.name %></option>
-      <% end %>
+  <select class="span2 mr10 activities" id="select-work-activity" name="activity">
+    <% for activity_id, activity of @activities: %>
+      <option value="<%= activity_id %>"><%= activity %></option>
     <% end %>
   </select>
 
   <label for="select-work-hours">Average hours</label>
-  <select class="span1 mr10" id="select-work-hours" name="hours">
+  <select class="span1 mr10 hours" id="select-work-hours" name="hours">
     <option value="0">0</option>
     <option value="1">1</option>
     <option value="2">2</option>

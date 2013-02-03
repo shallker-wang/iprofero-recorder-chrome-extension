@@ -1,0 +1,6 @@
+<strong><%= @activity_name %></strong> on <strong><%= @proj_name %></strong> for <strong><%= @hours %></strong> hours - <%= @day_name %> - <%= @day %>
+<% if @synced: %>
+  <span class="label label-error pull-right">Synced</span>
+<% else: %>
+  <span class="label label-info pull-right">Unsynced</span>
+<% end %>

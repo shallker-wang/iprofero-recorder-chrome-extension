@@ -1,0 +1,4 @@
+<div class="alert alert-warning records-tip-new">
+  You have <strong><%= @count %></strong> unsynced records.
+  <a href="#" class="records-sync" action="sync">Sync to iProfero</a>
+</div>

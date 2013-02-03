@@ -1,0 +1,9 @@
+<legend class="records-recent">This week</legend>
+<ul class="unstyled this-week">
+  <pre>no records</pre>
+</ul>
+
+<legend class="records-recent">A week ago</legend>
+<ul class="unstyled week-ago">
+  <pre>no records</pre>
+</ul>

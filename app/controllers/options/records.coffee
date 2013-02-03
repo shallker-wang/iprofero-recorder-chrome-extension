@@ -3,41 +3,59 @@ BrowserAction = require 'lib/BrowserAction'
 
 Spine = require('spine')
 
-Option = require 'models/option'
 Record = require 'models/record'
-window.Record = Record
+Setting = require 'models/setting'
+
+Tips = require 'controllers/options/records/tips'
+Syncs = require 'controllers/options/records/syncs'
+Lists = require 'controllers/options/records/lists'
+
+Timer = require 'lib/timer'
 
 class Records extends Spine.Controller
-
-  data: {}
 
   className: 'option-records'
 
   elements:
-    'legend.records-recent': 'legend_recent'
-    '.records-tip-running': 'tip_running'
-    '.records-tip-new': 'tip_new'
-
-  events:
-    'click .records-tip-running .close': 'clickHideTipRunning'
-    'click .records-sync': 'clickSync'
+    '.tips': 'elTips'
+    '.sync': 'elSync'
+    '.list': 'elList'
 
   constructor: ->
     super
-    Option.fetch()
+    return if not @requireAccount()
+    @render()
+
     Record.fetch()
-    # Record.destroyAll()
-    @html @render @load()
 
-  load: ->
-    @data.hide_tip_running = true if Option.get 'hide_tip_running'
-    @data.records_this_week = Record.getThisWeek()
-    @data.records_a_week_ago = Record.getWeekAgo()
-    @data.records_unsynced = Record.getUnsynced()
-    @data
+    @tips = new Tips el: @elTips
+    @sync = new Syncs el: @elSync
+    @list = new Lists el: @elList
 
-  render: (data)->
-    require('views/options/records')(data)
+  render: ->
+    @html require('views/options/records')()
+
+  requireAccount: ->
+    return true if Setting.get('email')
+    @html require('views/units/setup_account')()
+    return false
+
+  createRecord: ->
+    now = new Date
+    week = Timer.getThisWeek now.getTime()
+    record = new Record
+      'proj_id': 1
+      'proj_name': 'test'
+      'activity_id': 1
+      'activity_name': 'test'
+      'hours': 1
+      'time': now.getTime()
+      'synced': false
+      'target_week': "#{Timer.getFullDay week.begin} / #{Timer.getFullDay week.end}"
+      'day': Timer.getFullDay now.getTime()
+      'day_name': Timer.getDayName now.getTime()
+    @log record
+    # record.save()
 
   sync: ->
     records = Record.getUnsynced()
@@ -54,29 +72,10 @@ class Records extends Spine.Controller
   syncFailed: (response)=>
     @log 'syncFailed', response
 
-  clickHideTipRunning: (ev)->
-    ev.preventDefault()
-    new Option(name: 'hide_tip_running', value: true).save()
-    @refresh()
-
-  clickSync: (ev)->
-    ev.preventDefault()
-    @login()
-
-  refresh: ->
-    @navigate '/temp'
-    @navigate '/records'
-
   login: ->
     email = Option.get 'email'
     password = Option.get 'password'
     iProfero.login email, password, @loginSuccess, @loginFailed
-
-  loginSuccess: =>
-    @sync()
-
-  loginFailed: =>
-    @alert 'error', 'Account invalid.'
 
   alert: (type, msg)->
     @el.after require("views/alert.#{type}")(msg: msg)

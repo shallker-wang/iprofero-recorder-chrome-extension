@@ -6,7 +6,7 @@ Accounts = require('controllers/options/accounts')
 Works = require('controllers/options/works')
 Records = require('controllers/options/records')
 
-class OptionsContent extends Spine.Controller
+class Main extends Spine.Controller
 
   className: 'options-content'
 
@@ -14,19 +14,16 @@ class OptionsContent extends Spine.Controller
     super
     
     @routes
-      '/welcome': (route)->
+      'welcome': (route)->
         @html new Welcome
 
-      '/account': (route)->
+      'account': (route)->
         @html new Accounts
 
-      '/works': (route)->
+      'works': (route)->
         @html new Works
 
-      '/works/refresh': (route)->
-        @navigate '/works'
-        
-      '/records': (route)->
+      'records': (route)->
         @html new Records
 
-module.exports = OptionsContent
+module.exports = Main
