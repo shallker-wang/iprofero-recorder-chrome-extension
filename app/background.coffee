@@ -86,7 +86,7 @@ class Background extends Spine.Controller
 
   onClickIcon: (tab)=>
     if @records_unsync_count
-    then BrowserAction.openTab 'options.html#/records'
+    then BrowserAction.openTab 'options.html#records'
     else BrowserAction.openTab 'options.html'
 
   isRecordsCreateHour: (now)->
