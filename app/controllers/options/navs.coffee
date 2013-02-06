@@ -2,10 +2,6 @@ Spine = require('spine')
 
 class Navs extends Spine.Controller
 
-  evStop = (ev)->
-    ev.preventDefault()
-    ev.stopPropagation()
-
   elements:
     'li': 'elNavs'
 

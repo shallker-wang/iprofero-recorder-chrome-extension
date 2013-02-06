@@ -14,16 +14,16 @@ class Main extends Spine.Controller
     super
     
     @routes
-      'welcome': (route)->
+      '/welcome': (route)->
         @html new Welcome
 
-      'account': (route)->
+      '/account': (route)->
         @html new Accounts
 
-      'works': (route)->
+      '/works': (route)->
         @html new Works
 
-      'records': (route)->
+      '/records': (route)->
         @html new Records
 
 module.exports = Main

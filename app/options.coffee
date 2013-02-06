@@ -26,7 +26,7 @@ class Options extends Spine.Controller
     @append @navs, @main
 
     Spine.Route.setup()
-    @navigate 'welcome' unless window.location.hash
+    @navigate '/welcome' unless window.location.hash
 
     @login() if @hasAccount()
 
